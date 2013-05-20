@@ -16,6 +16,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,8 +40,8 @@ public class FahrgemeinschaftConnector extends Connector {
             "88071e8ebe7c755923b2b2027c36605d6b821d7" +
             "b173a314fc59b11776a489e09313c5883b8e6700124" +
             "d0e10274ab11336450dd40afb661e09a900df3da05264c";
-    static final SimpleDateFormat fulldf = new SimpleDateFormat("yyyyMMddHHmm");
-    static final SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+    static final SimpleDateFormat fulldf = new SimpleDateFormat("yyyyMMddHHmm", Locale.GERMAN);
+    static final SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.GERMAN);
 
     @Override
     public long getRides(Place from, Place to, Date dep, Date arr) {
@@ -86,7 +87,7 @@ public class FahrgemeinschaftConnector extends Connector {
         StringBuffer who = new StringBuffer();
         JSONObject p = json.getJSONObject("Privacy");
         String value = json.getString("Contactmail");
-        if (!value.equals("") && !value.equals("Null"))
+        if (!value.equals("") && !value.equals("null"))
             who.append(";mail=").append(p.getInt("Email")).append(value);
         value = json.getString("Contactmobile");
         if (!value.equals(""))
