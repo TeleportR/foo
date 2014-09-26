@@ -17,6 +17,8 @@ import de.fahrgemeinschaft.R;
 public class AutoCompletePicker extends AutoCompleteTextView
         implements OnFocusChangeListener, View.OnClickListener {
 
+    private boolean erstesmal = true;
+
     public AutoCompletePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOnFocusChangeListener(this);
@@ -27,7 +29,8 @@ public class AutoCompletePicker extends AutoCompleteTextView
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus && getAdapter() != null) {
             showDropDown();
-            performFiltering("", 0);
+            if (getAdapter() != null)
+                performFiltering("", 0);
         }
     }
 
@@ -39,6 +42,18 @@ public class AutoCompletePicker extends AutoCompleteTextView
     @Override
     public boolean enoughToFilter() {
         return true;
+    }
+
+    @Override
+    public void onFilterComplete(int count) {
+        System.out.println("complete " + count);
+        if (erstesmal) {
+            Cursor cursor = (Cursor) getAdapter().getItem(0);
+            if (cursor != null && cursor.getCount() > 0)
+                replaceText((cursor).getString(1));
+        }
+        erstesmal = false;
+        super.onFilterComplete(count);
     }
 
     public void setAutocompleteUri(final Uri uri) {
@@ -70,6 +85,7 @@ public class AutoCompletePicker extends AutoCompleteTextView
                 return cursor.getString(1);
             }
         });
+        performFiltering("", 0);
     }
 
     boolean initialDefault;

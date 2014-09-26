@@ -77,29 +77,16 @@ public class EditRideFragment3 extends SherlockFragment
             JSONObject d = ride.getDetails();
             if (!d.isNull(CONTACT.EMAIL))
                 email.text.setText(d.getString(CONTACT.EMAIL));
-            else {
-                email.text.setText(
-                    prefs.getString(CONTACT.EMAIL,
-                    prefs.getString(ProfileFragment.LOGIN, EMPTY)));
-            }
             if (!d.isNull(CONTACT.LANDLINE))
                 land.text.setText(d.getString(CONTACT.LANDLINE));
-            else {
-                land.text.setText(prefs.getString(CONTACT.LANDLINE, EMPTY));
-            }
             if (!d.isNull(CONTACT.MOBILE))
                 mobile.text.setText(d.getString(CONTACT.MOBILE));
-            else {
-                mobile.text.setText(prefs.getString(CONTACT.MOBILE, EMPTY));
-            }
             if (ride.getMode().equals(Ride.Mode.TRAIN)) {
                 plate.setVisibility(View.GONE);
             } else {
                 plate.setVisibility(View.VISIBLE);
                 if (!d.isNull(CONTACT.PLATE)) {
                     plate.text.setText(d.getString(CONTACT.PLATE));
-                } else {
-                    plate.text.setText(prefs.getString(CONTACT.PLATE, EMPTY));
                 }
             }
             name.text.setText(prefs.getString(ProfileFragment.LASTNAME, EMPTY));
@@ -135,8 +122,7 @@ public class EditRideFragment3 extends SherlockFragment
     public void onTextChange(String key, String text) {
         Ride ride = ((EditRideActivity)getActivity()).ride;
         try {
-            ride.getDetails().put(key, text);
-            prefs.edit().putString(key, text).commit();
+            if (ride != null) ride.getDetails().put(key, text);
         } catch (JSONException e) {
             e.printStackTrace();
         }
